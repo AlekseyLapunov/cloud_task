@@ -1,0 +1,39 @@
+---
+
+- name: cloud_task
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Create user 'cloudru'
+      ansible.builtin.user:
+        name: cloudru
+        password: "{{ 'cloudpass' | password_hash('sha512') }}"
+
+    - name: Enable public key authentication
+      ansible.builtin.lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^PubkeyAuthentication'
+        line: "PubkeyAuthentication yes"
+        state: present
+
+    - name: Forbid ssh root login
+      ansible.builtin.lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin'
+        line: "PermitRootLogin no"
+        state: present
+      notify:
+        - Restart sshd
+
+    - name: Transfer offered public key to user 'cloudru'
+      ansible.posix.authorized_key:
+        user: cloudru
+        state: present
+        key: "{{ lookup('file', './key_location/id_rsa.pub') }}" 
+
+  handlers:
+    - name: Restart sshd
+      ansible.builtin.service:
+        name: sshd
+        state: restarted

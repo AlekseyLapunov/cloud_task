@@ -1,0 +1,62 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cloudy
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudy-py
+  namespace: cloudy
+  labels:
+    app: cloudy-py
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cloudy-py
+  template:
+    metadata:
+      labels:
+        app: cloudy-py
+    spec:
+      containers:
+      - name: cloudy-py-container
+        imagePullPolicy: Never
+        image: cloudy-py
+        readinessProbe:
+          httpGet:
+            scheme: HTTP
+            path: /
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            scheme: HTTP
+            path: /
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        env:
+        - name: UUID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.uid
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudy-cluster-ip
+  namespace: cloudy
+  labels:
+    app: cloudy-py
+spec:
+  type: ClusterIP
+  selector:
+    app: cloudy-py
+  ports:
+  - port: 8000

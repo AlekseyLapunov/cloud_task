@@ -45,6 +45,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.uid
+        - name: AUTHOR
+          value: Aleksey
 
 ---
 apiVersion: v1

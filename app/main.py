@@ -23,6 +23,4 @@ def id():
     return os.popen("echo $UUID").read(), 200
 
 if(__name__) == '__main__':
-    os.environ["AUTHOR"] = "Aleksey"
-    os.environ["UUID"] = "83194a3e-f755-428a-8823-ce8e1fc6aa26"
     app.run(host="0.0.0.0", port=8000)

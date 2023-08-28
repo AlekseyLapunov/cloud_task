@@ -1,9 +1,9 @@
 FROM python:alpine
 
-RUN pip install Flask
-
 WORKDIR /app
 
 COPY . .
+
+RUN pip install Flask
 
 CMD ["python", "main.py"]

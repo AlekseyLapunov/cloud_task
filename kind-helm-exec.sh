@@ -16,5 +16,5 @@ cd ./helm && helm install cloudy-chart . --values ./values.yaml && cd ../
 kubectl get namespaces
 
 # Show pods
-echo Waiting pods to show... && sleep 8s
+echo Waiting pods to show... && sleep 10s
 kubectl get pods -n cloudy 

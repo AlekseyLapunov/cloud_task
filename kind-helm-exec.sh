@@ -12,13 +12,9 @@ kind load docker-image cloudy-py -n cloudy-cluster
 # Install helm chart
 cd ./helm && helm install cloudy-chart . --values ./values.yaml && cd ../
 
-# Show kubectl namespaces and created pods
+# Show kubectl namespaces
 kubectl get namespaces
 
-# Pending status
-echo Waiting pods in the pending status... && sleep 10s
+# Show pods
+echo Waiting pods to show... && sleep 8s
 kubectl get pods -n cloudy 
-
-# Ready status
-echo Waiting pods in the ready status... && sleep 6s
-kubectl get pods -n cloudy
